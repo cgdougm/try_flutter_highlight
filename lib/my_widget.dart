@@ -73,6 +73,13 @@ const Map<String, Map<String, TextStyle>> highlightThemes = {
   'Atom One Dark': atomOneDarkTheme,
 };
 
+// Add fonts map
+const Map<String, String> monospacedFonts = {
+  'Courier New': 'Courier New',
+  'Consolas': 'Consolas',
+  'Monaco': 'Monaco',
+};
+
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
 
@@ -83,6 +90,7 @@ class MyWidget extends StatefulWidget {
 class _MyWidgetState extends State<MyWidget> {
   String selectedLanguage = 'Markdown';
   String selectedTheme = 'Zenburn';
+  String selectedFont = 'Courier New';  // Add font state
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +151,33 @@ class _MyWidgetState extends State<MyWidget> {
                 ),
               ),
             ),
+            // Font selector
+            PopupMenuButton<String>(
+              initialValue: selectedFont,
+              onSelected: (String font) {
+                setState(() {
+                  selectedFont = font;
+                });
+              },
+              itemBuilder: (BuildContext context) {
+                return monospacedFonts.keys.map((String font) {
+                  return PopupMenuItem<String>(
+                    value: font,
+                    child: Text(font),
+                  );
+                }).toList();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(selectedFont),
+                    const Icon(Icons.arrow_drop_down),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
         Expanded(
@@ -151,8 +186,8 @@ class _MyWidgetState extends State<MyWidget> {
             language: selectedLanguage.toLowerCase(),
             theme: highlightThemes[selectedTheme]!,
             padding: const EdgeInsets.all(12),
-            textStyle: const TextStyle(
-              fontFamily: 'Courier New',
+            textStyle: TextStyle(  // Remove const and update fontFamily
+              fontFamily: monospacedFonts[selectedFont],
               fontSize: 16,
             ),
           ),

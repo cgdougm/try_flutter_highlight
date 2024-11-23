@@ -3,7 +3,7 @@ import 'my_widget.dart';
 
 void main() => runApp(MyApp());
 
-final title = 'Zenburn Theme with Courier New';
+final title = 'Flutter Highlight Demo';
 
 class MyApp extends StatelessWidget {
   @override
