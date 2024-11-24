@@ -1,4 +1,5 @@
 const Map<String, String> sampleCodes = {
+  // Markdown Language
   'Markdown': '''
 # Hello, World!
 
@@ -22,6 +23,8 @@ main() {
 }
 ```
 ''',
+
+  // Dart Language
   'Dart': '''
 void main() {
   final items = <String>['Apple', 'Banana', 'Orange'];
@@ -36,6 +39,8 @@ void main() {
        .forEach(print);
 }
 ''',
+
+  // Python Language
   'Python': '''
 def quicksort(arr):
     if len(arr) <= 1:
@@ -51,6 +56,8 @@ numbers = [3, 6, 8, 10, 1, 2, 1]
 sorted_nums = quicksort(numbers)
 print(f"Sorted array: {sorted_nums}")
 ''',
+
+  // Bash Language
   'Bash': '''
 #!/bin/bash
 
@@ -78,6 +85,8 @@ backup_files() {
 # Example usage
 backup_files "/home/user/documents" "/backup"
 ''',
+
+  // C++ Language
   'C++': '''
 #include <iostream>
 #include <vector>
@@ -110,5 +119,46 @@ int main() {
     
     return 0;
 }
+''',
+
+  // JavaScript Language
+  'JavaScript': '''
+// Example of modern JavaScript features
+class TaskManager {
+  constructor() {
+    this.tasks = new Map();
+  }
+
+  addTask(id, description) {
+    this.tasks.set(id, {
+      description,
+      completed: false,
+      createdAt: new Date()
+    });
+  }
+
+  async fetchAndProcessTasks() {
+    try {
+      const response = await fetch('https://api.example.com/tasks');
+      const data = await response.json();
+      
+      // Using array methods
+      return data
+        .filter(task => !task.completed)
+        .map(task => ({
+          ...task,
+          priority: task.urgent ? 'high' : 'normal'
+        }));
+    } catch (error) {
+      console.error(`Error processing tasks: \${error.message}`);
+    }
+  }
+}
+
+// Usage example
+const manager = new TaskManager();
+manager.addTask(1, 'Learn JavaScript');
+manager.fetchAndProcessTasks()
+  .then(tasks => console.log(tasks));
 ''',
 }; 

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:flutter_highlight/themes/zenburn.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_highlight/themes/dracula.dart';
 import 'package:flutter_highlight/themes/vs.dart';
 import 'package:flutter_highlight/themes/atom-one-dark.dart';
 import 'package:try_flutter_highlight/code_samples.dart';
+import 'package:desktop_drop/desktop_drop.dart';
 
 const Map<String, Map<String, TextStyle>> highlightThemes = {
   'Zenburn': zenburnTheme,
@@ -33,6 +35,13 @@ class _DemoHighlightWidgetState extends State<DemoHighlightWidget> {
   String selectedLanguage = 'Markdown';
   String selectedTheme = 'Zenburn';
   String selectedFont = 'Courier New';
+  String currentCode = '';
+
+  @override
+  void initState() {
+    super.initState();
+    currentCode = sampleCodes['Markdown']!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +59,7 @@ class _DemoHighlightWidgetState extends State<DemoHighlightWidget> {
                 onSelected: (String language) {
                   setState(() {
                     selectedLanguage = language;
+                    currentCode = sampleCodes[language]!;
                   });
                 },
                 itemBuilder: (BuildContext context) {
@@ -132,14 +142,28 @@ class _DemoHighlightWidgetState extends State<DemoHighlightWidget> {
           ),
         ),
         Expanded(
-          child: HighlightView(
-            sampleCodes[selectedLanguage]!,
-            language: selectedLanguage.toLowerCase(),
-            theme: highlightThemes[selectedTheme]!,
-            padding: const EdgeInsets.all(12),
-            textStyle: TextStyle(
-              fontFamily: monospacedFonts[selectedFont],
-              fontSize: 16,
+          child: DropTarget(
+            onDragDone: (details) async {
+              if (details.files.isEmpty) return;
+              try {
+                final file = details.files.first;
+                final contents = await file.readAsString();
+                setState(() {
+                  currentCode = contents;
+                });
+              } catch (e) {
+                debugPrint('Error reading file: $e');
+              }
+            },
+            child: HighlightView(
+              currentCode,
+              language: selectedLanguage.toLowerCase(),
+              theme: highlightThemes[selectedTheme]!,
+              padding: const EdgeInsets.all(12),
+              textStyle: TextStyle(
+                fontFamily: monospacedFonts[selectedFont],
+                fontSize: 16,
+              ),
             ),
           ),
         ),
